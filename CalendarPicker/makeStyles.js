@@ -93,12 +93,14 @@ function makeStyles(scaler) {
 
     prev: {
       textAlign: 'left',
-      fontSize: 14*scaler
+      fontSize: 20*scaler,
+      fontWeight: 'bold'
     },
 
     next: {
       textAlign: 'right',
-      fontSize: 14*scaler
+      fontSize: 20*scaler,
+      fontWeight: 'bold'
     },
 
     yearLabel: {

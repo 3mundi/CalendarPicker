@@ -124,23 +124,22 @@ var Days = React.createClass({
   },
 
   componentDidMount() {
-    this.updateSelectedStates(this.props.date.getDate());
+    this.updateSelectedStates(this.props.date.getDate(), this.props.month, this.props.date.getMonth());
   },
 
   // Trigger date change if new props are provided.
   // Typically, when selectedDate is changed programmatically.
   //
   componentWillReceiveProps: function(newProps) {
-    this.updateSelectedStates(newProps.date.getDate());
+    this.updateSelectedStates(newProps.date.getDate(), newProps.month, newProps.date.getMonth());
   },
 
-  updateSelectedStates(day) {
+  updateSelectedStates(day, month = 0, oldMonth = 0) {
     var selectedStates = [],
       daysInMonth = getDaysInMonth(this.props.month, this.props.year),
       i;
-
     for (i = 1; i <= daysInMonth; i++) {
-      if (i === day) {
+      if (i === day && month === oldMonth) {
         selectedStates.push(true);
       } else {
         selectedStates.push(false);
@@ -326,7 +325,7 @@ var HeaderControls = React.createClass({
     }
     else {
       previous = (
-        <TouchableOpacity onPress={this.getPrevious}>
+        <TouchableOpacity onPress={this.getPrevious} hitSlop={{top: 5, bottom: 5, left: 5, right: 5}}>
           <Text style={[styles.prev, textStyle]}>{this.props.previousTitle || 'Previous'}</Text>
         </TouchableOpacity>
       );
@@ -340,7 +339,7 @@ var HeaderControls = React.createClass({
     }
     else {
       next = (
-        <TouchableOpacity onPress={this.getNext}>
+        <TouchableOpacity onPress={this.getNext} hitSlop={{top: 5, bottom: 5, left: 5, right: 5}}>
           <Text style={[styles.next, textStyle]}>{this.props.nextTitle || 'Next'}</Text>
         </TouchableOpacity>
       );
@@ -371,7 +370,7 @@ var CalendarPicker = React.createClass({
     minDate: React.PropTypes.instanceOf(Date),
     selectedDate: React.PropTypes.instanceOf(Date).isRequired,
     onDateChange: React.PropTypes.func,
-    screenWidth: React.PropTypes.number,
+    screenWidth: React.PropTypes.number.isRequired,
     startFromMonday: React.PropTypes.bool,
     weekdays: React.PropTypes.array,
     months: React.PropTypes.array,
@@ -417,7 +416,7 @@ var CalendarPicker = React.createClass({
   },
 
   onMonthChange(month) {
-    this.setState({month: month}, () => { this.onDateChange(); });
+    this.setState({month: month});
   },
 
   getNextYear(){
